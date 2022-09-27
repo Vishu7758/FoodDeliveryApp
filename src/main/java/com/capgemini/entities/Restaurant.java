@@ -5,8 +5,6 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Restaurant {
@@ -15,10 +13,11 @@ public class Restaurant {
 	private String restaurantId;
 	@Column(name = "restaurant_name")
 	private String restaurantName;
-	@OneToOne
-	private Address address;
-	@OneToMany(mappedBy = "restaurants")
-	private List<Item> itemList;
+//	@OneToOne
+//	private Address address;
+	// make many to many
+//	@ManyToMany
+//	private List<Item> itemList;
 	private String managerName;
 	private String contactNumber;
 
@@ -31,8 +30,8 @@ public class Restaurant {
 		super();
 		this.restaurantId = restaurantId;
 		this.restaurantName = restaurantName;
-		this.address = address;
-		this.itemList = itemList;
+//		this.address = address;
+//		this.itemList = itemList;
 		this.managerName = managerName;
 		this.contactNumber = contactNumber;
 	}
@@ -53,21 +52,21 @@ public class Restaurant {
 		this.restaurantName = restaurantName;
 	}
 
-	public Address getAddress() {
-		return address;
-	}
+//	public Address getAddress() {
+//		return address;
+//	}
+//
+//	public void setAddress(Address address) {
+//		this.address = address;
+//	}
 
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
-	public List<Item> getItemList() {
-		return itemList;
-	}
-
-	public void setItemList(List<Item> itemList) {
-		this.itemList = itemList;
-	}
+//	public List<Item> getItemList() {
+//		return itemList;
+//	}
+//
+//	public void setItemList(List<Item> itemList) {
+//		this.itemList = itemList;
+//	}
 
 	public String getManagerName() {
 		return managerName;
