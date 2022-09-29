@@ -18,10 +18,6 @@ public class RestaurantServiceImpl implements IRestaurantService {
 		return repo.save(res);
 	}
 
-	public RestaurantServiceImpl(IRestaurantRepository repo) {
-		this.repo = repo;
-	}
-
 	@Override
 	public Restaurant updateRestaurant(Restaurant res) {
 		Restaurant updated = null;

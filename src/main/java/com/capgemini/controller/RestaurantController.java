@@ -44,12 +44,17 @@ public class RestaurantController {
 	}
 
 	@GetMapping("/restaurant")
-	public String test() {
-		return "Heyy";
+	public ResponseEntity<Restaurant> viewRestaurant(@RequestBody Restaurant restaurant) {
+		Restaurant newRestaurant = service.viewRestaurant(restaurant);
+		if (newRestaurant == null) {
+			return new ResponseEntity("Sorry! Restaurant not available to Update!", HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(newRestaurant, HttpStatus.OK);
 	}
 
-	@GetMapping("/getAllRestaurants")
-	public String getAll() {
-		return "Heyy";
+	@GetMapping
+	public String testEndpoint() {
+		return "Test Complete";
 	}
+
 }
