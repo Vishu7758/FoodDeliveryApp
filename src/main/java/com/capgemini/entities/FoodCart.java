@@ -1,7 +1,12 @@
 package com.capgemini.entities;
 
+import java.util.List;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,8 +20,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class Category {
+public class FoodCart {
 	@Id
-	private String catId;
-	private String categoryName;
+	@Column(name = "cart_id")
+	private String cartId;
+	@OneToOne
+	private Customer customer;
+	@OneToMany
+	private List<Item> itemList;
 }

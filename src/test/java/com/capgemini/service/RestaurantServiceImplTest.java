@@ -45,7 +45,7 @@ class RestaurantServiceImplTest {
 
 	@BeforeEach
 	public void initialize() {
-		this.itemsList.add(new Item("item1", "item1", 10, 12.3, null));
+		this.itemsList.add(new Item("item1", "item1", null, 10, 12.3, null));
 
 		address1 = new Address("1", "building1", "street1", "area1", "city1", "state1", "country1", "pincode1");
 		address2 = new Address("2", "building2", "street2", "area2", "city2", "state2", "country2", "pincode2");

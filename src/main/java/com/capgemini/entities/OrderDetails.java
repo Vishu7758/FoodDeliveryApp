@@ -1,7 +1,11 @@
 package com.capgemini.entities;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,8 +19,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class Category {
+public class OrderDetails {
 	@Id
-	private String catId;
-	private String categoryName;
+	private int orderId;
+	private LocalDateTime orderDate;
+	@OneToOne
+	@JoinColumn(name = "cartId")
+	private FoodCart cart;
+	private String orderStatus;
 }

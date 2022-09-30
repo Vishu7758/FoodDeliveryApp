@@ -16,4 +16,6 @@ public interface IRestaurantService {
 	public List<Restaurant> viewNearByRestaurant(String location);
 
 	public List<Restaurant> viewRestaurantByItemName(String name);
+
+	public Restaurant viewRestaurant(String restaurantId);
 }

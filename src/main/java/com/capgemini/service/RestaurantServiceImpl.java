@@ -53,4 +53,9 @@ public class RestaurantServiceImpl implements IRestaurantService {
 		return repo.viewRestaurantByItemName(name);
 	}
 
+	@Override
+	public Restaurant viewRestaurant(String restaurantId) {
+		return repo.findById(restaurantId).get();
+	}
+
 }

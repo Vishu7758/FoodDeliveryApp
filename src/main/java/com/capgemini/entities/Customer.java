@@ -1,5 +1,6 @@
 package com.capgemini.entities;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -15,8 +16,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class Category {
+public class Customer {
 	@Id
-	private String catId;
-	private String categoryName;
+	private String customerId;
+	private String firstName;
+	private String lastName;
+	private int age;
+	private String gender;
+	private String mobileNumber;
+
+	@Embedded
+	private Address address;
+
+	private String email;
+
 }

@@ -1,49 +1,52 @@
 package com.capgemini.controller;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.capgemini.entities.Address;
+import com.capgemini.entities.Category;
 import com.capgemini.entities.Item;
 import com.capgemini.entities.Restaurant;
 import com.capgemini.service.IRestaurantService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
+@DisplayName("Customer Controller Test Cases")
 @ExtendWith(MockitoExtension.class)
 class RestaurantControllerTest {
 
 	private MockMvc mockMvc;
 
-	ObjectMapper objectMapper = new ObjectMapper();
-	ObjectWriter objectWriter = objectMapper.writer();
+	@InjectMocks
+	RestaurantController controller;
 
 	@Mock
 	IRestaurantService service;
 
-	@InjectMocks
-	RestaurantController controller;
+	ObjectMapper objectMapper = new ObjectMapper();
+	ObjectWriter objectWriter = objectMapper.writer();
 
 	List<Item> itemsList = new ArrayList<>();
+	List<Restaurant> restaurants = new ArrayList<>();
 //	List<Restaurant> restaurants = new ArrayList<>();
 
 	Address address1;
@@ -58,6 +61,8 @@ class RestaurantControllerTest {
 	Restaurant restaurant4;
 	Restaurant restaurant5;
 
+	Category category;
+
 	@BeforeEach
 	public void mockitoSetUp() {
 		MockitoAnnotations.openMocks(this);
@@ -66,7 +71,8 @@ class RestaurantControllerTest {
 
 	@BeforeEach
 	public void initialize() {
-		this.itemsList.add(new Item("item1", "item1", 10, 12.3, null));
+		category = new Category("catId1", "catName1");
+		this.itemsList.add(new Item("item1", "item1", category, 10, 12.3, this.restaurants));
 
 		address1 = new Address("1", "building1", "street1", "area1", "city1", "state1", "country1", "pincode1");
 		address2 = new Address("2", "building2", "street2", "area2", "city2", "state2", "country2", "pincode2");
@@ -82,17 +88,88 @@ class RestaurantControllerTest {
 
 	}
 
+//	@Test
+//	void testViewRestaurantByMockito() throws Exception {
+//		Mockito.when(service.viewRestaurant(restaurant1)).thenReturn(restaurant1);
+//
+//		ResponseEntity<Restaurant> restuarant = controller.viewRestaurant(restaurant1);
+//
+//		assertThat(restuarant.getStatusCodeValue()).isEqualTo(200);
+//
+//		assertThat(restuarant.getBody().getRestaurantName()).isEqualTo(restaurant1.getRestaurantName());
+//	}
+
 	@Test
 	void testViewRestaurant() throws Exception {
-		Mockito.when(service.viewRestaurant(restaurant1)).thenReturn(restaurant1);
+//		Mockito.when(service.viewRestaurant(restaurant1)).thenReturn(restaurant1);
+//
+//		String content = objectWriter.writeValueAsString(restaurant1);
+//
+//		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/restaurant")
+//				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(content);
+//
+//		mockMvc.perform(mockRequest).andExpect(status().isOk()).andExpect(jsonPath("$", notNullValue()))
+//				.andExpect(jsonPath("$.restaurantName", is("reasturant1")));
 
-		String content = objectWriter.writeValueAsString(restaurant1);
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
-		MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.get("/restaurant")
-				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).content(content);
+		when(service.viewRestaurant(restaurant1)).thenReturn(restaurant1);
 
-		mockMvc.perform(mockRequest).andExpect(status().isOk()).andExpect(jsonPath("$", notNullValue()))
-				.andExpect(jsonPath("$.restaurantName", is("reasturant1")));
+		ResponseEntity<Restaurant> re = controller.viewRestaurant(restaurant1);
+
+		assertThat(re.getStatusCodeValue()).isEqualTo(200);
+
+	}
+
+	@Test
+	void testAddRestaurant() throws Exception {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+		when(service.addRestaurant(restaurant1)).thenReturn(restaurant1);
+
+		ResponseEntity<Restaurant> re = controller.addRestaurant(restaurant1);
+
+		assertThat(re.getStatusCodeValue()).isEqualTo(200);
+	}
+
+	@Test
+	void testUpdateRestaurant() throws Exception {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+		when(service.updateRestaurant(restaurant1)).thenReturn(restaurant1);
+
+		restaurant1.setRestaurantName("new_name");
+
+		ResponseEntity<Restaurant> re = controller.updateRestaurant(restaurant1);
+
+		assertThat(re.getStatusCodeValue()).isEqualTo(200);
+	}
+
+	@Test
+	void testRemoveRestaurant() throws Exception {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+		when(service.removeRestaurant(restaurant1)).thenReturn(restaurant1);
+
+		ResponseEntity<Restaurant> re = controller.removeRestaurant(restaurant1);
+
+		assertThat(re.getStatusCodeValue()).isEqualTo(200);
+	}
+
+	@Test
+	public void testViewRestaurantByItemName() {
+//		return repo.viewRestaurantByItemName(name);
+		fail("not yet implemented");
+	}
+
+	@Test
+	public void testViewNearbyRestaurant() {
+//		return repo.findById(restaurantId).get();
+		fail("not yet implemented");
 	}
 
 }

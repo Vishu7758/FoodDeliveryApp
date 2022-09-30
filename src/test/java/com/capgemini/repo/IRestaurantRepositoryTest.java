@@ -33,7 +33,7 @@ class IRestaurantRepositoryTest {
 
 	@Test
 	void saveRestaurantTest() {
-		this.itemsList.add(new Item("item1", "item1", 10, 12.3, null));
+		this.itemsList.add(new Item("item1", "item1", null, 10, 12.3, null));
 
 		Address address1 = new Address("1", "building1", "street1", "area1", "city1", "state1", "country1", "pincode1");
 
