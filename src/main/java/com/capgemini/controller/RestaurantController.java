@@ -60,24 +60,22 @@ public class RestaurantController {
 		return new ResponseEntity<>(newRestaurant, HttpStatus.OK);
 	}
 
-	@GetMapping("/restaurant/{nearbyName}")
+	@GetMapping("/restaurant/{location}")
 	public ResponseEntity<List<Restaurant>> viewNearByRestaurant(@PathVariable String location) {
-//		Restaurant newRestaurant = restaurantService.viewRestaurant(restaurant);
-//		if (newRestaurant == null) {
-//			return new ResponseEntity("Sorry! Restaurant not available to Update!", HttpStatus.NOT_FOUND);
-//		}
-		return null;
-//		return new ResponseEntity<>(newRestaurant, HttpStatus.OK);
+		List<Restaurant> nearbyRestaurants = restaurantService.viewNearByRestaurant(location);
+		if (nearbyRestaurants == null) {
+			return new ResponseEntity("Sorry! Restaurant not available to Update!", HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(nearbyRestaurants, HttpStatus.OK);
 	}
 
-	@GetMapping("/restaurantByItemName/{itemName}")
+	@GetMapping("/restaurantByItemName/{name}")
 	public ResponseEntity<List<Restaurant>> viewRestaurantByItemName(@PathVariable String name) {
-//		Restaurant newRestaurant = restaurantService.viewRestaurant(restaurant);
-//		if (newRestaurant == null) {
-//			return new ResponseEntity("Sorry! Restaurant not available to Update!", HttpStatus.NOT_FOUND);
-//		}
-		return null;
-//		return new ResponseEntity<>(newRestaurant, HttpStatus.OK);
+		List<Restaurant> nearbyRestaurantsByItemName = restaurantService.viewRestaurantByItemName(name);
+		if (nearbyRestaurantsByItemName == null) {
+			return new ResponseEntity("Sorry! Restaurant not available to Update!", HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(nearbyRestaurantsByItemName, HttpStatus.OK);
 	}
 
 	@PutMapping("/restaurant/{restaurantId}/item/{itemId}")
