@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.entities.Item;
+import com.capgemini.entities.Login;
 import com.capgemini.entities.Restaurant;
 import com.capgemini.service.IItemService;
 import com.capgemini.service.ILoginService;
@@ -32,15 +33,8 @@ public class RestaurantController {
 	@Autowired
 	ILoginService loginService;
 
-	@GetMapping("/restaurant")
+	@GetMapping("/viewRestaurant")
 	public ResponseEntity<Restaurant> viewRestaurant(@RequestBody Restaurant restaurant, HttpServletRequest request) {
-		// session checking
-		boolean validLogin = loginService.checkSession(request);
-		if (!validLogin) {
-			throw new IllegalArgumentException("Not logged in");
-		}
-		// todo owner check
-
 		Restaurant newRestaurant = restaurantService.viewRestaurant(restaurant);
 		if (newRestaurant == null) {
 			return new ResponseEntity("Sorry! Restaurant not available with give ID!", HttpStatus.FORBIDDEN);
@@ -48,12 +42,17 @@ public class RestaurantController {
 		return new ResponseEntity<>(newRestaurant, HttpStatus.OK);
 	}
 
-	@PostMapping("/restaurant")
+	@PostMapping("/addRestaurant")
 	public ResponseEntity<Restaurant> addRestaurant(@RequestBody Restaurant restaurant, HttpServletRequest request) {
 		// session checking
 		boolean validLogin = loginService.checkSession(request);
 		if (!validLogin) {
 			throw new IllegalArgumentException("Not logged in");
+		}
+		// owner check
+		Login currentUser = (Login) request.getSession().getAttribute("userDetails");
+		if (!currentUser.isOwner()) {
+			throw new IllegalArgumentException("Operation not allowed");
 		}
 
 		Restaurant saved = null;
@@ -61,12 +60,18 @@ public class RestaurantController {
 		return new ResponseEntity<>(saved, HttpStatus.OK);
 	}
 
-	@PutMapping("/restaurant")
+	@PutMapping("/updateRestaurant")
 	public ResponseEntity<Restaurant> updateRestaurant(@RequestBody Restaurant restaurant, HttpServletRequest request) {
 		// session checking
 		boolean validLogin = loginService.checkSession(request);
 		if (!validLogin) {
 			throw new IllegalArgumentException("Not logged in");
+		}
+
+		// owner check
+		Login currentUser = (Login) request.getSession().getAttribute("userDetails");
+		if (!currentUser.isOwner()) {
+			throw new IllegalArgumentException("Operation not allowed");
 		}
 
 		Restaurant newRestaurant = restaurantService.updateRestaurant(restaurant);
@@ -76,12 +81,18 @@ public class RestaurantController {
 		return new ResponseEntity<>(newRestaurant, HttpStatus.OK);
 	}
 
-	@DeleteMapping("/restaurant")
+	@DeleteMapping("/removeRestaurant")
 	public ResponseEntity<Restaurant> removeRestaurant(@RequestBody Restaurant restaurant, HttpServletRequest request) {
 		// session checking
 		boolean validLogin = loginService.checkSession(request);
 		if (!validLogin) {
 			throw new IllegalArgumentException("Not logged in");
+		}
+
+		// owner check
+		Login currentUser = (Login) request.getSession().getAttribute("userDetails");
+		if (!currentUser.isOwner()) {
+			throw new IllegalArgumentException("Operation not allowed");
 		}
 
 		Restaurant delRestaurant = restaurantService.removeRestaurant(restaurant);
@@ -112,6 +123,18 @@ public class RestaurantController {
 	@PutMapping("/restaurant/{restaurantId}/item/{itemId}")
 	public ResponseEntity<Restaurant> addItemToRestaurant(@PathVariable String restaurantId,
 			@PathVariable String itemId, HttpServletRequest request) {
+		// session checking
+		boolean validLogin = loginService.checkSession(request);
+		if (!validLogin) {
+			throw new IllegalArgumentException("Not logged in");
+		}
+
+		// owner check
+		Login currentUser = (Login) request.getSession().getAttribute("userDetails");
+		if (!currentUser.isOwner()) {
+			throw new IllegalArgumentException("Operation not allowed");
+		}
+
 		Restaurant restaurantFromRepo = restaurantService.viewRestaurant(restaurantId);
 		Item item = itemService.viewItem(itemId);
 		restaurantFromRepo.addItem(item);

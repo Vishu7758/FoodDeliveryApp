@@ -22,7 +22,6 @@ public class IBillServiceImpl implements IBillService {
 
 	@Override
 	public Bill updateBill(Bill bill) {
-
 		Bill updateBill = null;
 		if (repo.existsById(bill.getBillId()))
 			updateBill = repo.save(bill);
@@ -46,17 +45,7 @@ public class IBillServiceImpl implements IBillService {
 
 	@Override
 	public List<Bill> viewBills(LocalDate startDate, LocalDate endDate) {
-//		List<Bill> filteredBills = repo.findAll();
-//		for(Bill b: filteredBills)
-//		{
-//			if(!((b.getBillDate().toLocalDate().isAfter(startDate))&&(b.getBillDate().toLocalDate().isBefore(endDate))))
-//			{
-//				filteredBills.remove(b);
-//			}
-//		}
-//		return filteredBills;
-//		return repo.viewBills(startDate, endDate);
-		return null;
+		return repo.viewBills(startDate, endDate);
 	}
 
 	@Override
@@ -66,8 +55,6 @@ public class IBillServiceImpl implements IBillService {
 
 	@Override
 	public double calculateTotalCost(Bill bill) {
-//		return repo.findById(bill.getBillId()).get().getTotalCost();
-//		return repo.calculateTotalCost(bill);
-		return 0.0;
+		return repo.calculateTotalCost(bill);
 	}
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.entities.Customer;
+import com.capgemini.entities.Restaurant;
 import com.capgemini.repo.ICustomerRepository;
 
 @Service
@@ -44,8 +45,8 @@ public class CustomerServiceImpl implements ICustomerService {
 	}
 
 	@Override
-	public List<Customer> viewAllCustomer() {
-		return repository.findAll();
+	public List<Customer> viewAllCustomer(Restaurant rest) {
+		return repository.viewAllCustomers(rest.getRestaurantId());
 	}
 
 }

@@ -44,7 +44,6 @@ public class LoginServiceImpl implements ILoginService {
 		HttpSession session = request.getSession();
 		try {
 			Login currentUser = (Login) session.getAttribute("userDetails");
-
 			if (currentUser.isLoggedIn()) {
 				return true;
 			}

@@ -27,7 +27,7 @@ public class Item {
 	@Id
 	private String itemId;
 	private String itemName;
-//	@OneToOne(cascade = CascadeType.ALL)
+
 	@OneToOne
 	@JoinColumn(name = "catId")
 	private Category category;

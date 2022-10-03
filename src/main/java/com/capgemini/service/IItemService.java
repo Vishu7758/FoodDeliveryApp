@@ -1,6 +1,10 @@
 package com.capgemini.service;
 
+import java.util.List;
+
+import com.capgemini.entities.Category;
 import com.capgemini.entities.Item;
+import com.capgemini.entities.Restaurant;
 
 public interface IItemService {
 	public Item addItem(Item item);
@@ -12,7 +16,10 @@ public interface IItemService {
 	public Item viewItem(String itemId);
 
 	public Item removeItem(Item item);
-//	public List<Item> viewAllItems(Category cat);
-//	public List<Item> viewAllItems(Restaurant res);
-//	public List<Item> viewAllItemsByName(String name);
+
+	public List<Item> viewAllItems(Category cat);
+
+	public List<Item> viewAllItems(Restaurant res);
+
+	public List<Item> viewAllItemsByName(String name);
 }
