@@ -61,7 +61,7 @@ public class IBillServiceImpl implements IBillService {
 
 	@Override
 	public List<Bill> viewBills(String custId) {
-		return null;
+		return repo.viewBills(custId);
 	}
 
 	@Override

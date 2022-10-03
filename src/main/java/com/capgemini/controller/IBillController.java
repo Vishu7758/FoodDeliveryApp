@@ -1,10 +1,13 @@
 package com.capgemini.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +38,15 @@ public class IBillController {
 			return new ResponseEntity("Bill not available!", HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Bill>(showBill, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/get/{custId}")
+	public ResponseEntity<List<Bill>> viewBillUsingCustomerId(@PathVariable String custId) {
+		List<Bill> bills = service.viewBills(custId);
+		if (bills == null) {
+			return new ResponseEntity("Bill not available!", HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<List<Bill>>(bills, HttpStatus.OK);
 	}
 
 	@PutMapping(value = "/update")
