@@ -116,7 +116,7 @@ class RestaurantControllerTest {
 
 		when(service.viewRestaurant(restaurant1)).thenReturn(restaurant1);
 
-		ResponseEntity<Restaurant> re = controller.viewRestaurant(restaurant1);
+		ResponseEntity<Restaurant> re = controller.viewRestaurant(restaurant1, request);
 
 		assertThat(re.getStatusCodeValue()).isEqualTo(200);
 
@@ -129,7 +129,7 @@ class RestaurantControllerTest {
 
 		when(service.addRestaurant(restaurant1)).thenReturn(restaurant1);
 
-		ResponseEntity<Restaurant> re = controller.addRestaurant(restaurant1);
+		ResponseEntity<Restaurant> re = controller.addRestaurant(restaurant1, request);
 
 		assertThat(re.getStatusCodeValue()).isEqualTo(200);
 	}
@@ -143,7 +143,7 @@ class RestaurantControllerTest {
 
 		restaurant1.setRestaurantName("new_name");
 
-		ResponseEntity<Restaurant> re = controller.updateRestaurant(restaurant1);
+		ResponseEntity<Restaurant> re = controller.updateRestaurant(restaurant1, request);
 
 		assertThat(re.getStatusCodeValue()).isEqualTo(200);
 	}
@@ -155,7 +155,7 @@ class RestaurantControllerTest {
 
 		when(service.removeRestaurant(restaurant1)).thenReturn(restaurant1);
 
-		ResponseEntity<Restaurant> re = controller.removeRestaurant(restaurant1);
+		ResponseEntity<Restaurant> re = controller.removeRestaurant(restaurant1, request);
 
 		assertThat(re.getStatusCodeValue()).isEqualTo(200);
 	}
