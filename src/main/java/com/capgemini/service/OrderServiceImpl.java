@@ -1,5 +1,6 @@
 package com.capgemini.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public OrderDetails updateOrder(OrderDetails order) {
 		OrderDetails orderUpdate = null;
-		if (orderRepo.existsById(order.getOrderId()))
+		if (orderRepo.existsById(order.getOrderId()) && orderRepo.findById(order.getOrderId()).get().isActive())
 			orderUpdate = orderRepo.save(order);
 		return orderUpdate;
 	}
@@ -33,7 +34,8 @@ public class OrderServiceImpl implements IOrderService {
 	public OrderDetails removeOrder(OrderDetails order) {
 		OrderDetails orderUpdate = order;
 		if (orderRepo.existsById(order.getOrderId())) {
-			orderRepo.delete(order);
+			order.setActive(false);
+			orderRepo.save(order);
 			return orderUpdate;
 		}
 		return null;
@@ -41,17 +43,34 @@ public class OrderServiceImpl implements IOrderService {
 
 	@Override
 	public OrderDetails viewOrder(OrderDetails order) {
-		return orderRepo.findById(order.getOrderId()).get();
+		OrderDetails showOrder = orderRepo.findById(order.getOrderId()).get();
+		if (showOrder.isActive())
+			return showOrder;
+		return null;
 	}
 
 	@Override
 	public List<OrderDetails> viewAllOrders(Restaurant res) {
-		return orderRepo.viewAllOrders(res.getRestaurantId(), res.getRestaurantName());
+		List<OrderDetails> list = orderRepo.viewAllOrders(res.getRestaurantId(), res.getRestaurantName());
+		List<OrderDetails> newList = new ArrayList<>();
+		for (OrderDetails o : list) {
+			if (o.isActive())
+				newList.add(o);
+
+		}
+		return newList;
 	}
 
 	@Override
 	public List<OrderDetails> viewAllOrders(Customer customer) {
-		return orderRepo.viewAllOrders(customer.getCustomerId());
+		List<OrderDetails> list = orderRepo.viewAllOrders(customer.getCustomerId());
+		List<OrderDetails> newList = new ArrayList<>();
+		for (OrderDetails o : list) {
+			if (o.isActive())
+				newList.add(o);
+
+		}
+		return newList;
 	}
 
 }

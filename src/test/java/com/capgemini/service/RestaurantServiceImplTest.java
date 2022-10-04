@@ -58,7 +58,6 @@ class RestaurantServiceImplTest {
 		restaurant3 = new Restaurant("R3", "reasturant3", address3, this.itemsList, "manager3", "contact3");
 		restaurant4 = new Restaurant("R4", "reasturant4", address4, this.itemsList, "manager4", "contact4");
 		restaurant5 = new Restaurant("R5", "reasturant5", address5, this.itemsList, "manager5", "contact5");
-
 	}
 
 	@Test
@@ -75,6 +74,8 @@ class RestaurantServiceImplTest {
 
 		Mockito.when(repository.save(restaurant1)).thenReturn(restaurant1);
 		Mockito.when(repository.existsById(restaurant1.getRestaurantId())).thenReturn(true);
+		Mockito.when(repository.findById(restaurant1.getRestaurantId())).thenReturn(Optional.of(restaurant1));
+
 		restaurant1.setContactNumber("updated number");
 		assertThat(service.updateRestaurant(restaurant1)).isEqualTo(restaurant1);
 	}

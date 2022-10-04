@@ -9,11 +9,11 @@ import com.capgemini.entities.Category;
 import com.capgemini.repo.ICategoryRepository;
 
 @Service
-public class ICategoryServiceImpl implements ICategoryService{
+public class ICategoryServiceImpl implements ICategoryService {
 
 	@Autowired
 	ICategoryRepository repo;
-	
+
 	@Override
 	public Category addCategory(Category category) {
 		return repo.save(category);

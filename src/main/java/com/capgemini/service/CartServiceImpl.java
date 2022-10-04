@@ -25,6 +25,7 @@ public class CartServiceImpl implements ICartService {
 		return repoCart;
 	}
 
+	@Override
 	public FoodCart increaseQuantity(FoodCart cart, Item item, int quantity) {
 		FoodCart repoCart = cartRepo.findById(cart.getCartId()).get();
 		List<Item> tempItems = repoCart.getItemList();
@@ -48,7 +49,7 @@ public class CartServiceImpl implements ICartService {
 		for (Item it : tempItems) {
 			if (it.getItemId().equals(item.getItemId())) {
 				int quant = it.getQuantity();
-				it.setQuantity(quant - quantity);
+				it.setQuantity(Math.max((quant - quantity), 0));
 				break;
 			}
 		}

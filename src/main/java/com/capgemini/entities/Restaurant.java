@@ -9,22 +9,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-@Builder
 public class Restaurant {
 	@Id
 	private String restaurantId;
 	private String restaurantName;
+	private boolean isActive = true;
 
 	@Embedded
 	private Address address;
@@ -36,6 +31,21 @@ public class Restaurant {
 	private List<Item> itemList;
 	private String managerName;
 	private String contactNumber;
+
+	public Restaurant() {
+		super();
+	}
+
+	public Restaurant(String restaurantId, String restaurantName, Address address, List<Item> itemList,
+			String managerName, String contactNumber) {
+		super();
+		this.restaurantId = restaurantId;
+		this.restaurantName = restaurantName;
+		this.address = address;
+		this.itemList = itemList;
+		this.managerName = managerName;
+		this.contactNumber = contactNumber;
+	}
 
 	public void addItem(Item item) {
 		itemList.add(item);

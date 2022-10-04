@@ -1,5 +1,6 @@
 package com.capgemini.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,8 @@ public class CustomerServiceImpl implements ICustomerService {
 	@Override
 	public Customer updateCustomer(Customer customer) {
 		Customer updated = null;
-		if (repository.existsById(customer.getCustomerId()))
+		if (repository.existsById(customer.getCustomerId())
+				&& repository.findById(customer.getCustomerId()).get().isActive())
 			updated = repository.save(customer);
 		return updated;
 	}
@@ -32,21 +34,31 @@ public class CustomerServiceImpl implements ICustomerService {
 	public Customer removeCustomer(Customer customer) {
 		Customer delCustomer = customer;
 		if (repository.existsById(customer.getCustomerId())) {
-			repository.delete(customer);
+			customer.setActive(false);
+			repository.save(customer);
 			return delCustomer;
 		}
-
 		return null;
 	}
 
 	@Override
 	public Customer viewCustomer(Customer customer) {
-		return repository.findById(customer.getCustomerId()).get();
+		Customer showCustomer = repository.findById(customer.getCustomerId()).get();
+		if (showCustomer.isActive())
+			return showCustomer;
+		return null;
 	}
 
 	@Override
 	public List<Customer> viewAllCustomer(Restaurant rest) {
-		return repository.viewAllCustomers(rest.getRestaurantId());
+		List<Customer> list = repository.viewAllCustomers(rest.getRestaurantId());
+		List<Customer> newList = new ArrayList<>();
+		for (Customer c : list) {
+			if (c.isActive())
+				newList.add(c);
+
+		}
+		return newList;
 	}
 
 }
