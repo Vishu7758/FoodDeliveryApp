@@ -43,6 +43,12 @@ public class ICategoryServiceImpl implements ICategoryService {
 	}
 
 	@Override
+	public Category viewCategoryById(String catId) {
+		Category category = repo.findById(catId).get();
+		return category;
+	}
+
+	@Override
 	public List<Category> viewAllCategory() {
 		return repo.findAll();
 	}

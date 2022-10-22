@@ -27,10 +27,10 @@ import com.capgemini.service.ILoginService;
 public class IBillController {
 
 	@Autowired
-	IBillService service;
+	private IBillService service;
 
 	@Autowired
-	ILoginService loginService;
+	private ILoginService loginService;
 
 	@PostMapping(value = "/addBill")
 	public ResponseEntity<Bill> addBill(@RequestBody Bill bill, HttpServletRequest request) {
