@@ -18,7 +18,7 @@ import com.capgemini.service.ILoginService;
 public class LoginController {
 
 	@Autowired
-	ILoginService loginService;
+	private ILoginService loginService;
 
 	@PostMapping("/signin")
 	public ResponseEntity<String> signIn(@RequestBody Login login, HttpServletRequest request) {

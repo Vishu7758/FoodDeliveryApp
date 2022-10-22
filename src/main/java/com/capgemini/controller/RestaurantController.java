@@ -25,13 +25,13 @@ import com.capgemini.service.IRestaurantService;
 @RestController
 public class RestaurantController {
 	@Autowired
-	IRestaurantService restaurantService;
+	private IRestaurantService restaurantService;
 
 	@Autowired
-	IItemService itemService;
+	private IItemService itemService;
 
 	@Autowired
-	ILoginService loginService;
+	private ILoginService loginService;
 
 	@GetMapping("/viewRestaurant")
 	public ResponseEntity<Restaurant> viewRestaurant(@RequestBody Restaurant restaurant, HttpServletRequest request) {

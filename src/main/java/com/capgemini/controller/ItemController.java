@@ -26,9 +26,9 @@ import com.capgemini.service.ILoginService;
 public class ItemController {
 
 	@Autowired
-	IItemService service;
+	private IItemService service;
 	@Autowired
-	ILoginService loginService;
+	private ILoginService loginService;
 
 	@PostMapping("/addItem")
 	public ResponseEntity<Item> addItem(@RequestBody Item item, HttpServletRequest request) {

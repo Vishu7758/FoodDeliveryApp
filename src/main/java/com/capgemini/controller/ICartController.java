@@ -21,13 +21,13 @@ import com.capgemini.service.ILoginService;
 @RestController
 public class ICartController {
 	@Autowired
-	ICartService service;
+	private ICartService service;
 
 	@Autowired
-	IItemRepository repo;
+	private IItemRepository repo;
 
 	@Autowired
-	ILoginService loginService;
+	private ILoginService loginService;
 
 	@PostMapping("/addItemToCart/{itemId}")
 	public ResponseEntity<FoodCart> addItemToCart(@RequestBody FoodCart foodCart, @PathVariable String itemId,

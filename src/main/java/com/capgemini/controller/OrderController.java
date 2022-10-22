@@ -25,9 +25,9 @@ import com.capgemini.service.IOrderService;
 public class OrderController {
 
 	@Autowired
-	IOrderService service;
+	private IOrderService service;
 	@Autowired
-	ILoginService loginService;
+	private ILoginService loginService;
 
 	@PostMapping("/addOrder")
 	public ResponseEntity<OrderDetails> addOrder(@RequestBody OrderDetails order, HttpServletRequest request) {
