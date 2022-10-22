@@ -42,11 +42,7 @@ public class RestaurantServiceImpl implements IRestaurantService {
 
 	@Override
 	public Restaurant viewRestaurant(Restaurant res) {
-		Restaurant restaurant = repo.findById(res.getRestaurantId()).get();
-		if (restaurant != null && restaurant.isActive()) {
-			return restaurant;
-		}
-		return null;
+		return viewRestaurant(res.getRestaurantId());
 	}
 
 	@Override
