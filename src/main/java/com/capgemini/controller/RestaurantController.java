@@ -33,15 +33,6 @@ public class RestaurantController {
 	@Autowired
 	private ILoginService loginService;
 
-	@GetMapping("/viewRestaurant")
-	public ResponseEntity<Restaurant> viewRestaurant(@RequestBody Restaurant restaurant, HttpServletRequest request) {
-		Restaurant newRestaurant = restaurantService.viewRestaurant(restaurant);
-		if (newRestaurant == null) {
-			return new ResponseEntity("Sorry! Restaurant not available with give ID!", HttpStatus.FORBIDDEN);
-		}
-		return new ResponseEntity<>(newRestaurant, HttpStatus.OK);
-	}
-
 	@PostMapping("/addRestaurant")
 	public ResponseEntity<Restaurant> addRestaurant(@RequestBody Restaurant restaurant, HttpServletRequest request) {
 		// session checking
@@ -100,6 +91,15 @@ public class RestaurantController {
 			return new ResponseEntity("Sorry! Restaurant not available!", HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<>(delRestaurant, HttpStatus.OK);
+	}
+
+	@GetMapping("/viewRestaurant/{restId}")
+	public ResponseEntity<Restaurant> viewRestaurant(@PathVariable String restId, HttpServletRequest request) {
+		Restaurant newRestaurant = restaurantService.viewRestaurant(restaurantService.viewRestaurant(restId));
+		if (newRestaurant == null) {
+			return new ResponseEntity("Sorry! Restaurant not available with give ID!", HttpStatus.FORBIDDEN);
+		}
+		return new ResponseEntity<>(newRestaurant, HttpStatus.OK);
 	}
 
 	@GetMapping("/restaurant/{location}")
