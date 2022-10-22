@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,20 +16,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.entities.Bill;
 import com.capgemini.service.IBillService;
 import com.capgemini.service.ILoginService;
 
-@Controller
+@RestController
 @RequestMapping("/bill")
 public class IBillController {
 
 	@Autowired
-	private IBillService service;
+	IBillService service;
 
 	@Autowired
-	private ILoginService loginService;
+	ILoginService loginService;
 
 	@PostMapping(value = "/addBill")
 	public ResponseEntity<Bill> addBill(@RequestBody Bill bill, HttpServletRequest request) {
@@ -44,14 +44,14 @@ public class IBillController {
 		return new ResponseEntity<Bill>(saved, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/viewBill")
-	public ResponseEntity<Bill> viewBill(@RequestBody Bill bill, HttpServletRequest request) {
+	@GetMapping(value = "/viewBill/{billId}")
+	public ResponseEntity<Bill> viewBill(@PathVariable String billId, HttpServletRequest request) {
 		// session checking
 		boolean validLogin = loginService.checkSession(request);
 		if (!validLogin) {
 			throw new IllegalArgumentException("Not logged in");
 		}
-		Bill showBill = service.viewBill(bill);
+		Bill showBill = service.viewBill(service.viewBillById(billId));
 		if (showBill == null) {
 			return new ResponseEntity("Bill not available!", HttpStatus.NOT_FOUND);
 		}
@@ -91,15 +91,15 @@ public class IBillController {
 		return new ResponseEntity<List<Bill>>(findBills, HttpStatus.OK);
 	}
 
-	@GetMapping(value = "/calculateTotalCost")
-	public ResponseEntity<Double> calculateTotalCost(@RequestBody Bill bill, HttpServletRequest request) {
+	@GetMapping(value = "/calculateTotalCost/{billId}")
+	public ResponseEntity<Double> calculateTotalCost(@PathVariable String billId, HttpServletRequest request) {
 		// session checking
 		boolean validLogin = loginService.checkSession(request);
 		if (!validLogin) {
 			throw new IllegalArgumentException("Not logged in");
 		}
 
-		double totalCost = service.calculateTotalCost(bill);
+		double totalCost = service.calculateTotalCost(service.viewBillById(billId));
 		return new ResponseEntity<Double>(totalCost, HttpStatus.OK);
 	}
 

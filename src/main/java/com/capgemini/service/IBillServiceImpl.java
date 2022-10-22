@@ -39,6 +39,11 @@ public class IBillServiceImpl implements IBillService {
 	}
 
 	@Override
+	public Bill viewBillById(String billId) {
+		return repo.findById(billId).get();
+	}
+
+	@Override
 	public Bill viewBill(Bill bill) {
 		return repo.findById(bill.getBillId()).get();
 	}

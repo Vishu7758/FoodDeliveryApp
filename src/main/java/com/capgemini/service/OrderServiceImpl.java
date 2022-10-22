@@ -43,10 +43,7 @@ public class OrderServiceImpl implements IOrderService {
 
 	@Override
 	public OrderDetails viewOrder(OrderDetails order) {
-		OrderDetails showOrder = orderRepo.findById(order.getOrderId()).get();
-		if (showOrder.isActive())
-			return showOrder;
-		return null;
+		return viewOrderById(order.getOrderId());
 	}
 
 	@Override
@@ -73,4 +70,11 @@ public class OrderServiceImpl implements IOrderService {
 		return newList;
 	}
 
+	@Override
+	public OrderDetails viewOrderById(int id) {
+		OrderDetails showOrder = orderRepo.findById(id).get();
+		if (showOrder.isActive())
+			return showOrder;
+		return null;
+	}
 }

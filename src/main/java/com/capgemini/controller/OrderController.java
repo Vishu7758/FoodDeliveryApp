@@ -9,25 +9,30 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capgemini.entities.Customer;
 import com.capgemini.entities.Login;
 import com.capgemini.entities.OrderDetails;
-import com.capgemini.entities.Restaurant;
+import com.capgemini.service.ICustomerService;
 import com.capgemini.service.ILoginService;
 import com.capgemini.service.IOrderService;
+import com.capgemini.service.IRestaurantService;
 
 @RestController
 public class OrderController {
 
 	@Autowired
-	private IOrderService service;
+	IOrderService service;
 	@Autowired
-	private ILoginService loginService;
+	IRestaurantService resService;
+	@Autowired
+	ICustomerService custService;
+	@Autowired
+	ILoginService loginService;
 
 	@PostMapping("/addOrder")
 	public ResponseEntity<OrderDetails> addOrder(@RequestBody OrderDetails order, HttpServletRequest request) {
@@ -72,23 +77,24 @@ public class OrderController {
 		return new ResponseEntity<OrderDetails>(delOrder, HttpStatus.OK);
 	}
 
-	@GetMapping("/viewOrder")
-	public ResponseEntity<OrderDetails> viewOrder(@RequestBody OrderDetails order, HttpServletRequest request) {
+	@GetMapping("/viewOrder/{orderId}")
+	public ResponseEntity<OrderDetails> viewOrder(@PathVariable int orderId, HttpServletRequest request) {
 		// session checking
 		boolean validLogin = loginService.checkSession(request);
 		if (!validLogin) {
 			throw new IllegalArgumentException("Not logged in");
 		}
 		// todo owner check
-		OrderDetails showOrder = service.viewOrder(order);
+		OrderDetails showOrder = service.viewOrder(service.viewOrderById(orderId));
 		if (showOrder == null) {
 			return new ResponseEntity("Sorry! OrderDetails not available!", HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<OrderDetails>(showOrder, HttpStatus.OK);
 	}
 
-	@GetMapping("/viewAllOrders/restaurant")
-	public ResponseEntity<List<OrderDetails>> viewAllOrders(@RequestBody Restaurant res, HttpServletRequest request) {
+	@GetMapping("/viewAllOrders/{restaurantId}")
+	public ResponseEntity<List<OrderDetails>> viewAllOrders(@PathVariable String restaurantId,
+			HttpServletRequest request) {
 		// session checking
 		boolean validLogin = loginService.checkSession(request);
 		if (!validLogin) {
@@ -100,15 +106,15 @@ public class OrderController {
 			throw new IllegalArgumentException("Operation not allowed");
 		}
 
-		List<OrderDetails> resultSet = service.viewAllOrders(res);
+		List<OrderDetails> resultSet = service.viewAllOrders(resService.viewRestaurant(restaurantId));
 		if (resultSet == null) {
 			return new ResponseEntity("Sorry! OrderDetails not available!", HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<List<OrderDetails>>(resultSet, HttpStatus.OK);
 	}
 
-	@GetMapping("/viewAllOrders/customer")
-	public ResponseEntity<List<OrderDetails>> viewAllOrders(@RequestBody Customer customer,
+	@GetMapping("/viewAllOrders/{customerId}")
+	public ResponseEntity<List<OrderDetails>> viewAllOrdersByCustomer(@PathVariable String customerId,
 			HttpServletRequest request) {
 		// session checking
 		boolean validLogin = loginService.checkSession(request);
@@ -117,7 +123,7 @@ public class OrderController {
 		}
 		// todo owner check
 
-		List<OrderDetails> resultSet = service.viewAllOrders(customer);
+		List<OrderDetails> resultSet = service.viewAllOrders(custService.viewCustomerById(customerId));
 		if (resultSet == null) {
 			return new ResponseEntity("Sorry! OrderDetails not available!", HttpStatus.NOT_FOUND);
 		}

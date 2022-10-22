@@ -32,10 +32,7 @@ public class ItemServiceImpl implements IItemService {
 
 	@Override
 	public Item viewItem(Item item) {
-		Item showItem = itemRepo.findById(item.getItemId()).get();
-		if (showItem.isActive())
-			return showItem;
-		return null;
+		return viewItem(item.getItemId());
 	}
 
 	@Override

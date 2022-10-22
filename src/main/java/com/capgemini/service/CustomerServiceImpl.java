@@ -14,7 +14,7 @@ import com.capgemini.repo.ICustomerRepository;
 public class CustomerServiceImpl implements ICustomerService {
 
 	@Autowired
-	ICustomerRepository repository;
+	private ICustomerRepository repository;
 
 	@Override
 	public Customer addCustomer(Customer customer) {
@@ -50,8 +50,8 @@ public class CustomerServiceImpl implements ICustomerService {
 	}
 
 	@Override
-	public List<Customer> viewAllCustomer(Restaurant rest) {
-		List<Customer> list = repository.viewAllCustomers(rest.getRestaurantId());
+	public List<Customer> viewAllCustomer(Restaurant restaurant) {
+		List<Customer> list = repository.viewAllCustomers(restaurant.getRestaurantId());
 		List<Customer> newList = new ArrayList<>();
 		for (Customer c : list) {
 			if (c.isActive())
@@ -59,6 +59,11 @@ public class CustomerServiceImpl implements ICustomerService {
 
 		}
 		return newList;
+	}
+
+	@Override
+	public Customer viewCustomerById(String customerId) {
+		return repository.findById(customerId).get();
 	}
 
 }

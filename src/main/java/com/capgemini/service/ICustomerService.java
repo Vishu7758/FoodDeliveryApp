@@ -14,6 +14,7 @@ public interface ICustomerService {
 
 	Customer viewCustomer(Customer customer);
 
-	List<Customer> viewAllCustomer(Restaurant rest);
+	List<Customer> viewAllCustomer(Restaurant resturant);
 
+	Customer viewCustomerById(String customerId);
 }

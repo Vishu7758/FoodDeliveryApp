@@ -29,7 +29,7 @@ public class LoginController {
 		if (login.isLoggedIn()) {
 			HttpSession session = request.getSession(true);
 			session.setAttribute("userDetails", login);
-			return new ResponseEntity<String>("LOGGED_IN", HttpStatus.FOUND);
+			return new ResponseEntity<String>("LOGGED_IN", HttpStatus.OK);
 		}
 		return new ResponseEntity<String>("USER NOT FOUND", HttpStatus.NOT_FOUND);
 	}

@@ -15,20 +15,24 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capgemini.entities.Category;
 import com.capgemini.entities.Item;
 import com.capgemini.entities.Login;
-import com.capgemini.entities.Restaurant;
+import com.capgemini.service.ICategoryService;
 import com.capgemini.service.IItemService;
 import com.capgemini.service.ILoginService;
+import com.capgemini.service.IRestaurantService;
 
 @RestController
 public class ItemController {
 
 	@Autowired
-	private IItemService service;
+	IItemService service;
 	@Autowired
-	private ILoginService loginService;
+	IRestaurantService resService;
+	@Autowired
+	ICategoryService catService;
+	@Autowired
+	ILoginService loginService;
 
 	@PostMapping("/addItem")
 	public ResponseEntity<Item> addItem(@RequestBody Item item, HttpServletRequest request) {
@@ -88,27 +92,7 @@ public class ItemController {
 		return new ResponseEntity<Item>(delItem, HttpStatus.OK);
 	}
 
-	@GetMapping("/viewItem")
-	public ResponseEntity<Item> viewItem(@RequestBody Item item, HttpServletRequest request) {
-		// session checking
-		boolean validLogin = loginService.checkSession(request);
-		if (!validLogin) {
-			throw new IllegalArgumentException("Not logged in");
-		}
-		// todo owner check
-		Login currentUser = (Login) request.getSession().getAttribute("userDetails");
-		if (!currentUser.isOwner()) {
-			throw new IllegalArgumentException("Operation not allowed");
-		}
-
-		Item showItem = service.viewItem(item);
-		if (showItem == null) {
-			return new ResponseEntity("Sorry! Item not available!", HttpStatus.NOT_FOUND);
-		}
-		return new ResponseEntity<Item>(showItem, HttpStatus.OK);
-	}
-
-	@GetMapping("/viewItemById/{itemId}")
+	@GetMapping("/viewItem/{itemId}")
 	public ResponseEntity<Item> viewItem(@PathVariable String itemId, HttpServletRequest request) {
 		// session checking
 		boolean validLogin = loginService.checkSession(request);
@@ -121,25 +105,45 @@ public class ItemController {
 			throw new IllegalArgumentException("Operation not allowed");
 		}
 
-		Item showItem = service.viewItem(itemId);
+		Item showItem = service.viewItem(service.viewItem(itemId));
 		if (showItem == null) {
 			return new ResponseEntity("Sorry! Item not available!", HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<Item>(showItem, HttpStatus.OK);
 	}
 
-	@GetMapping("/viewAllItems/category")
-	public ResponseEntity<List<Item>> viewAllItems(@RequestBody Category category) {
-		List<Item> resultSet = service.viewAllItems(category);
+//	@GetMapping("/viewItemById/{itemId}")
+//	public ResponseEntity<Item> viewItem(@PathVariable String itemId, HttpServletRequest request) {
+//		// session checking
+//		boolean validLogin = loginService.checkSession(request);
+//		if (!validLogin) {
+//			throw new IllegalArgumentException("Not logged in");
+//		}
+//		// todo owner check
+//		Login currentUser = (Login) request.getSession().getAttribute("userDetails");
+//		if (!currentUser.isOwner()) {
+//			throw new IllegalArgumentException("Operation not allowed");
+//		}
+//
+//		Item showItem = service.viewItem(itemId);
+//		if (showItem == null) {
+//			return new ResponseEntity("Sorry! Item not available!", HttpStatus.NOT_FOUND);
+//		}
+//		return new ResponseEntity<Item>(showItem, HttpStatus.OK);
+//	}
+
+	@GetMapping("/viewAllItems/{categoryId}")
+	public ResponseEntity<List<Item>> viewAllItemsByCategory(@PathVariable String categoryId) {
+		List<Item> resultSet = service.viewAllItems(catService.viewCategoryById(categoryId));
 		if (resultSet == null) {
 			return new ResponseEntity("Sorry! Item not available!", HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<List<Item>>(resultSet, HttpStatus.OK);
 	}
 
-	@GetMapping("/viewAllItems/restaurant")
-	public ResponseEntity<List<Item>> viewAllItems(@RequestBody Restaurant restaurant) {
-		List<Item> resultSet = service.viewAllItems(restaurant);
+	@GetMapping("/viewAllItems/{restaurantId}")
+	public ResponseEntity<List<Item>> viewAllItemsByRes(@PathVariable String restaurantId) {
+		List<Item> resultSet = service.viewAllItems(resService.viewRestaurant(restaurantId));
 		if (resultSet == null) {
 			return new ResponseEntity("Sorry! Item not available!", HttpStatus.NOT_FOUND);
 		}

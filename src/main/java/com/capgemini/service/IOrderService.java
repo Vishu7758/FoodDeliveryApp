@@ -18,4 +18,6 @@ public interface IOrderService {
 	public List<OrderDetails> viewAllOrders(Restaurant res);
 
 	public List<OrderDetails> viewAllOrders(Customer customer);
+
+	public OrderDetails viewOrderById(int id);
 }

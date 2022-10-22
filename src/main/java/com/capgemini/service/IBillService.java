@@ -15,6 +15,8 @@ public interface IBillService {
 
 	public Bill viewBill(Bill bill);
 
+	public Bill viewBillById(String billId);
+
 	public List<Bill> viewBills(LocalDate startDate, LocalDate endDate);
 
 	public List<Bill> viewBills(String custId);
