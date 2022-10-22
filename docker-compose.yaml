@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  customer:
+    image: tanvithakur/team4app:v1
+    ports:
+    - 8484:8484
+
+  postgres:
+    image: postgres:14.5
+    ports:
+    - 5432:5432
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: scooby
+      POSTGRES_DB: training
