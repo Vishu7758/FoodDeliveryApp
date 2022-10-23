@@ -83,7 +83,7 @@ public class CustomerController {
 		if (showCustomer == null) {
 			return new ResponseEntity("Sorry! Customer not available!", HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
+		return new ResponseEntity<Customer>(showCustomer, HttpStatus.OK);
 	}
 
 	@GetMapping("/viewallCustomers")
