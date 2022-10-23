@@ -3,13 +3,13 @@ kind: Deployment  #What kind of object you want to create
 metadata: #deployment name, helps uniquely identify the object
    name: customerms
 
-spec:  
+spec:  #pod's sprecification
   selector:
     matchLabels:
-      app: customerms 
+      app: customerms # deployment name under which current pod is present
 
 
-  replicas: 1 # tells deployment to run 1 pods matching the template
+  replicas: 5 # tells deployment to run 1 pods matching the template
   template:
     metadata:
       labels:
