@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   customer:
-    image: tanvithakur/team4app:v1
+    image: vishalkharade/sprint2:v1
     ports:
     - 8484:8484
 
@@ -14,4 +14,4 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: team4
-      POSTGRES_DB: training
+      POSTGRES_DB: team4db

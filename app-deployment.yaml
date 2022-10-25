@@ -1,23 +1,23 @@
 apiVersion: apps/v1 #version of the Kubernetes API you're using to create this object
 kind: Deployment  #What kind of object you want to create
 metadata: #deployment name, helps uniquely identify the object
-   name: customerms
+   name: team4app
 
 spec:  
   selector:
     matchLabels:
-      app: customerms 
+      app: team4app 
 
 
   replicas: 1 # tells deployment to run 1 pods matching the template
   template:
     metadata:
       labels:
-        app: customerms
+        app: team4app
     spec:   #What state you desire for the object
 
       containers:
-      - name: customerms #container name
-        image: 'vishalkharade/sprint1:v1' #image name
+      - name: team4app #container name
+        image: 'vishalkharade/sprint2:v1' #image name
         ports:
         - containerPort: 8484 # demo runs on port 8484
